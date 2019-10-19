@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "236513508922",
+    "firebase_url": "https://flutterminecraftcoordinates.firebaseio.com",
+    "project_id": "flutterminecraftcoordinates",
+    "storage_bucket": "flutterminecraftcoordinates.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236513508922:android:b913c853dc44aeaec63f03",
+        "android_client_info": {
+          "package_name": "com.alin.minecraft_coordinates"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236513508922-o666hmnsqdnnivfn207bip92scp11hsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGteC9LDjfbUPEaw23jCE9tpsRxKfrOwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236513508922-o666hmnsqdnnivfn207bip92scp11hsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
