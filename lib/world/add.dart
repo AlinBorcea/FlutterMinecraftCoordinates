@@ -16,52 +16,22 @@ class _AddState extends State<Add> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: ListView(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.0),
-                child: Image.asset(
-                  'assets/village.jpg',
-                  width: size.width * 0.95,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
-              child: TextField(
-                controller: _nameController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: 'Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
-              child: TextField(
-                controller: _seedController,
-                keyboardType: TextInputType.numberWithOptions(
-                    signed: false, decimal: true),
-                decoration: InputDecoration(
-                  hintText: 'Seed (optional)',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                ),
-              ),
-            ),
+            _topImage(MediaQuery.of(context).size),
+            _inputField(_nameController, TextInputType.text, 'World name'),
+            _inputField(_seedController, TextInputType.numberWithOptions(),
+                'Seed (optional)'),
+
+            /// Pick play style
             Container(
               margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
               child: _dropDownButton(),
             ),
+
+            /// Pick color
             Container(
               margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
               child: RaisedButton(
@@ -75,6 +45,8 @@ class _AddState extends State<Add> {
                 },
               ),
             ),
+
+            /// Cancel
             Container(
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(left: 4.0, right: 4.0),
@@ -92,6 +64,8 @@ class _AddState extends State<Add> {
                       },
                     ),
                   ),
+
+                  /// Save world
                   Container(
                     margin: EdgeInsets.only(left: 2.0, right: 2.0),
                   ),
@@ -102,14 +76,7 @@ class _AddState extends State<Add> {
                         style: TextStyle(color: Colors.white),
                       ),
                       color: Colors.green,
-                      onPressed: () {
-                        if (_nameController.text != '') {
-                          if (_seedController.text == '')
-                            _seedController.text = '0';
-
-                          addWorld(new World(_nameController.text, _playStyle, _seedController.text, _color.hashCode));
-                        }
-                      },
+                      onPressed: () {},
                     ),
                   ),
                 ],
@@ -121,6 +88,7 @@ class _AddState extends State<Add> {
     );
   }
 
+  /// Ui elements of the page
   Widget _dropDownButton() {
     return DropdownButton<String>(
       value: _playStyle,
@@ -171,5 +139,45 @@ class _AddState extends State<Add> {
         ],
       ),
     );
+  }
+
+  Widget _topImage(Size size) {
+    return Container(
+      margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6.0),
+        child: Image.asset(
+          'assets/village.jpg',
+          width: size.width * 0.95,
+        ),
+      ),
+    );
+  }
+
+  Widget _inputField(
+      TextEditingController controller, TextInputType inputType, String hint) {
+    return Container(
+      margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
+      child: TextField(
+        controller: controller,
+        keyboardType: inputType,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Helper functions
+  void saveWorld() {
+    if (_nameController.text != '') {
+      if (_seedController.text == '') _seedController.text = '0';
+
+      addWorld(new World(_nameController.text, _playStyle, _seedController.text,
+          _color.hashCode));
+    }
   }
 }

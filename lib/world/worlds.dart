@@ -23,7 +23,7 @@ class _WorldsState extends State<Worlds> {
             },
           ),
         ],
-        ),
+      ),
       body: Center(
         child: StreamBuilder(
           stream: Firestore.instance.collection('Worlds').snapshots(),
@@ -36,7 +36,8 @@ class _WorldsState extends State<Worlds> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) => Add()));
+          Navigator.push(
+              context, new MaterialPageRoute(builder: (context) => Add()));
         },
       ),
     );
@@ -71,11 +72,14 @@ Widget _worldListTile(World world) {
       margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0),
       elevation: 4.0,
       shape: RoundedRectangleBorder(
-        borderRadius:BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       child: ListTile(
         leading: Icon(Icons.work),
-        title: Text(world.name, textScaleFactor: 1.5,),
+        title: Text(
+          world.name,
+          textScaleFactor: 1.5,
+        ),
       ),
     ),
   );
