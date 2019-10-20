@@ -15,7 +15,15 @@ class _WorldsState extends State<Worlds> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Worlds'),
-      ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              debugPrint('lib/world/worlds.dart -> account pressed!');
+            },
+          ),
+        ],
+        ),
       body: Center(
         child: StreamBuilder(
           stream: Firestore.instance.collection('Worlds').snapshots(),
@@ -49,7 +57,7 @@ Widget _worldsBody(AsyncSnapshot<QuerySnapshot> snapshot) {
 Widget _worldsList(AsyncSnapshot<QuerySnapshot> snapshot) {
   return ListView(
     children: snapshot.data.documents.map((DocumentSnapshot document) {
-      return _worldListTile(toWorld(document));
+      return _worldListTile(World.fromDocument(document));
     }).toList(),
   );
 }

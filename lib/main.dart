@@ -5,7 +5,8 @@ void main() {
   runApp(MaterialApp(
     title: 'MC Coordinates',
     theme: ThemeData(
-      primarySwatch: Colors.orange,
+      primarySwatch: Colors.green,
+      scaffoldBackgroundColor: Color.fromARGB(255, 243, 243, 243), // chill white
     ),
     home: Worlds(),
   ));
