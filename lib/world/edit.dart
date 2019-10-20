@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/material_picker.dart';
 import 'package:minecraft_coordinates/models/world.dart';
-import 'package:minecraft_coordinates/database/firestore_helper.dart';
 import 'package:minecraft_coordinates/app_widgets/components.dart';
+import 'package:flutter_colorpicker/material_picker.dart';
+import 'package:minecraft_coordinates/database/firestore_helper.dart';
 
-class Add extends StatefulWidget {
+class Edit extends StatefulWidget {
+  Edit(this._world);
+
+  final World _world;
+
   @override
-  State createState() => _AddState();
+  State createState() => _EditState();
 }
 
-class _AddState extends State<Add> {
+class _EditState extends State<Edit> {
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _seedController = new TextEditingController();
-  String _playStyle = "Survival";
-  Color _color = Colors.green;
+  String _playStyle;
+  Color _color;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget._world.name;
+    _seedController.text = widget._world.seed;
+    _playStyle = widget._world.playStyle;
+    _color = new Color(widget._world.color);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +86,7 @@ class _AddState extends State<Add> {
                       ),
                       color: Colors.green,
                       onPressed: () {
-                        _saveWorld();
+                        _editWorld();
                       },
                     ),
                   ),
@@ -142,13 +155,10 @@ class _AddState extends State<Add> {
     );
   }
 
-  /// Helper functions
-  void _saveWorld() {
-    if (_nameController.text != '') {
-      if (_seedController.text == '') _seedController.text = '0';
-
-      addWorld(new World(_nameController.text, _playStyle, _seedController.text,
-          _color.hashCode));
-    }
+  void _editWorld() {
+    updateWorld(
+        widget._world.name,
+        new World(_nameController.text, _seedController.text, _playStyle,
+            _color.hashCode));
   }
 }

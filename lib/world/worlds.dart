@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minecraft_coordinates/app_widgets/components.dart';
 import 'package:flutter/material.dart';
+import 'package:minecraft_coordinates/database/firestore_helper.dart';
 import 'package:minecraft_coordinates/models/world.dart';
 import 'add.dart';
+import 'edit.dart';
 
 class Worlds extends StatefulWidget {
   @override
@@ -29,7 +31,7 @@ class _WorldsState extends State<Worlds> {
           stream: Firestore.instance.collection('Worlds').snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            return _worldsBody(snapshot);
+            return _worldsBody(context, snapshot);
           },
         ),
       ),
@@ -42,45 +44,79 @@ class _WorldsState extends State<Worlds> {
       ),
     );
   }
-}
 
-Widget _worldsBody(AsyncSnapshot<QuerySnapshot> snapshot) {
-  if (snapshot.hasError)
-    return errorIcon();
-  else if (snapshot.connectionState == ConnectionState.waiting)
-    return loadingIcon();
-  else if (!snapshot.hasData)
-    return noDataIcon();
-  else
-    return _worldsList(snapshot);
-}
+  Widget _worldsBody(BuildContext context,
+      AsyncSnapshot<QuerySnapshot> snapshot) {
+    if (snapshot.hasError)
+      return errorIcon();
+    else if (snapshot.connectionState == ConnectionState.waiting)
+      return loadingIcon();
+    else if (!snapshot.hasData)
+      return noDataIcon();
+    else
+      return _worldsList(context, snapshot);
+  }
 
-Widget _worldsList(AsyncSnapshot<QuerySnapshot> snapshot) {
-  return ListView(
-    children: snapshot.data.documents.map((DocumentSnapshot document) {
-      return _worldListTile(World.fromDocument(document));
-    }).toList(),
-  );
-}
+  Widget _worldsList(BuildContext context,
+      AsyncSnapshot<QuerySnapshot> snapshot) {
+    return ListView(
+      children: snapshot.data.documents.map((DocumentSnapshot document) {
+        return _worldListTile(context, World.fromDocument(document));
+      }).toList(),
+    );
+  }
 
-Widget _worldListTile(World world) {
-  return GestureDetector(
-    onTap: () {
-      debugPrint("Worlds.dart -> Pressed on world ${world.name}");
-    },
-    child: Card(
-      margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0),
-      elevation: 4.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: ListTile(
-        leading: Icon(Icons.work),
-        title: Text(
-          world.name,
-          textScaleFactor: 1.5,
+  Widget _worldListTile(BuildContext context, World world) {
+    return GestureDetector(
+      onTap: () {
+        debugPrint("Worlds.dart -> Pressed on world ${world.name}");
+      },
+      onLongPress: () {
+        Navigator.of(context)
+            .push(new MaterialPageRoute(builder: (context) => Edit(world)));
+      },
+      onHorizontalDragStart: (details) {
+        _showDeleteWorldDialog(context, world);
+      },
+      child: Card(
+        margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0),
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListTile(
+          leading: Icon(Icons.work),
+          title: Text(
+            world.name,
+            textScaleFactor: 1.5,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  Future<Widget> _showDeleteWorldDialog(BuildContext context, World world) {
+    return showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Are you sure you want to delete world ${world.name}?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                deleteWorld(world.name);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+    );
+  }
+
 }
