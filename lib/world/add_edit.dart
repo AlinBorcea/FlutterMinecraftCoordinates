@@ -1,19 +1,36 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/material_picker.dart';
 import 'package:minecraft_coordinates/models/world.dart';
 import 'package:minecraft_coordinates/database/firestore_helper.dart';
 import 'package:minecraft_coordinates/app_widgets/components.dart';
 
-class Add extends StatefulWidget {
+class AddEdit extends StatefulWidget {
+  AddEdit(this._world);
+
+  final World _world;
+
   @override
-  State createState() => _AddState();
+  State createState() => _AddEditState();
 }
 
-class _AddState extends State<Add> {
+class _AddEditState extends State<AddEdit> {
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _seedController = new TextEditingController();
   String _playStyle = "Survival";
   Color _color = Colors.green;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget._world != null) {
+      _nameController.text = widget._world.name;
+      _seedController.text = widget._world.seed;
+      _playStyle = widget._world.playStyle;
+      _color = new Color(widget._world.color);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +90,7 @@ class _AddState extends State<Add> {
                       ),
                       color: Colors.green,
                       onPressed: () {
-                        _saveWorld();
+                        _addEditWorld();
                       },
                     ),
                   ),
@@ -142,13 +159,43 @@ class _AddState extends State<Add> {
     );
   }
 
-  /// Helper functions
-  void _saveWorld() {
-    if (_nameController.text != '') {
-      if (_seedController.text == '') _seedController.text = '0';
+  void _addEditWorld() {
+    if (_dataIsValid()) {
+      if (widget._world == null)
+        addWorld(new World(_nameController.text, _playStyle,
+            _seedController.text, _color.hashCode));
+      else
+        updateWorld(
+            widget._world.name,
+            new World(_nameController.text, _playStyle, _seedController.text,
+                _color.hashCode));
 
-      addWorld(new World(_nameController.text, _playStyle, _seedController.text,
-          _color.hashCode));
+      Navigator.of(context).pop();
+    } else {
+      _showAppDialog(context, 'Data is invalid!');
     }
+  }
+
+  /// Helper functions of helper functions
+  bool _dataIsValid() {
+    if (_seedController.text == '') _seedController.text = '0';
+    return _nameController.text != '';
+  }
+
+  Future<void> _showAppDialog(BuildContext context, String message) {
+    return showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
