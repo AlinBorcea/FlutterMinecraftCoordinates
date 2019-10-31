@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/material_picker.dart';
 import 'package:minecraft_coordinates/models/world.dart';
 import 'package:minecraft_coordinates/database/firestore_helper.dart';
-import 'package:minecraft_coordinates/app_widgets/components.dart';
+import 'package:minecraft_coordinates/app_widgets/stateless_widgets.dart';
 
-class AddEdit extends StatefulWidget {
-  AddEdit(this._world);
+class AddEditWorld extends StatefulWidget {
+  AddEditWorld(this._world);
 
   final World _world;
 
   @override
-  State createState() => _AddEditState();
+  State createState() => _AddEditWorldState();
 }
 
-class _AddEditState extends State<AddEdit> {
+class _AddEditWorldState extends State<AddEditWorld> {
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _seedController = new TextEditingController();
   String _playStyle = "Survival";
