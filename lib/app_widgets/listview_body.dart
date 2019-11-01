@@ -52,10 +52,11 @@ Widget _listTile(BuildContext context, Object object, bool isWorld) {
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: ListTile(
-          leading: Icon(Icons.work),
+          leading: Icon(Icons.work, color: _colorOf(object),),
           title: Text(
             _titleOf(object),
             textScaleFactor: 1.5,
+            style: Theme.of(context).textTheme.body1,
           ),
         ),
       ),
@@ -106,4 +107,13 @@ String _titleOf(Object object) {
   else if (object is Coordinate) return object.name;
 
   return 'LOLLOL';
+}
+
+Color _colorOf(Object object) {
+  if (object is World)
+    return new Color(object.color);
+  else if (object is Coordinate)
+    return new Color(object.color);
+
+  return Colors.blue;
 }

@@ -29,13 +29,13 @@ Widget noDataIcon() {
 }
 
 /// Add/Edit world widgets that do not use setState
-Widget topImage(Size size) {
+Widget topImage(Size size, String asset) {
   return Container(
     margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(6.0),
       child: Image.asset(
-        'assets/village.jpg',
+        asset,
         width: size.width * 0.95,
       ),
     ),
@@ -51,6 +51,7 @@ Widget inputField(
       keyboardType: inputType,
       decoration: InputDecoration(
         hintText: hint,
+        hintStyle: TextStyle(color: Colors.white70),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
         ),

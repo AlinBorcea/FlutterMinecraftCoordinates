@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:minecraft_coordinates/models/coordinate.dart';
 import 'package:minecraft_coordinates/models/world.dart';
 import 'package:minecraft_coordinates/app_widgets/listview_body.dart';
+import 'add_edit_coordinate.dart';
 
 class Coordinates extends StatefulWidget {
   final World _world;
@@ -27,7 +27,8 @@ class CoordinatesState extends State<Coordinates> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          debugPrint('pressed on Fab add coordinate');
+          Navigator.of(context).push(new MaterialPageRoute(
+              builder: (context) => AddEditCoordinate(widget._world.name, null)));
         },
       ),
     );

@@ -38,7 +38,7 @@ class _AddEditWorldState extends State<AddEditWorld> {
       body: Center(
         child: ListView(
           children: <Widget>[
-            topImage(MediaQuery.of(context).size),
+            topImage(MediaQuery.of(context).size, 'assets/village.jpg'),
             inputField(_nameController, TextInputType.text, 'World name'),
             inputField(_seedController, TextInputType.numberWithOptions(),
                 'Seed (optional)'),
